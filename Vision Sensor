@@ -1,0 +1,42 @@
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/*    Module:       main.cpp                                                  */
+/*    Author:       C:\Users\99705003                                         */
+/*    Created:      Tue Feb 18 2020                                           */
+/*    Description:  V5 project                                                */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+ 
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Vision5              vision        5              
+// Drivetrain           drivetrain    1, 2, 11, 12   
+// ---- END VEXCODE CONFIGURED DEVICES ----
+ 
+#include "vex.h"
+ 
+using namespace vex;
+ 
+int main() {
+ // Initializing Robot Configuration. DO NOT REMOVE!
+ vexcodeInit();
+ while(true){
+ int centerFOV = 158;
+ int offsetX = 15;
+ Vision5.takeSnapshot(Vision5__GRN);
+ 
+ if(Vision5.largestObject.centerY <= 204 + 12 && Vision5.largestObject.centerY >= 204 - 12){
+   Drivetrain.stop();
+ }
+ else if(Vision5.largestObject.centerX > centerFOV + offsetX){
+   Drivetrain.turnFor(vex::turnType::right, 5, vex::rotationUnits::deg);
+ }
+ else if(Vision5.largestObject.centerX < centerFOV - offsetX){
+   Drivetrain.turnFor(vex::turnType::left, 5, vex::rotationUnits::deg);
+ }
+ else{
+   Drivetrain.driveFor(vex::directionType::fwd, 1, vex::distanceUnits::in);
+ }
+ }
+}
